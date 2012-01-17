@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspy", "Raspy\Raspy.csproj", "{2810917F-5DBB-4CEF-BEBA-ED41003A2CE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspy.Test", "Raspy.Test\Raspy.Test.csproj", "{551B9E9D-95AD-4172-BE2E-213736E7792C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F82D0B2C-6641-4FD1-84B7-9449AC961292}"
+	ProjectSection(SolutionItems) = preProject
+		..\Build.proj = ..\Build.proj
+		Local.testsettings = Local.testsettings
+		Raspy.vsmdi = Raspy.vsmdi
+		SolutionInfo.cs = SolutionInfo.cs
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Raspy.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2810917F-5DBB-4CEF-BEBA-ED41003A2CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2810917F-5DBB-4CEF-BEBA-ED41003A2CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2810917F-5DBB-4CEF-BEBA-ED41003A2CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2810917F-5DBB-4CEF-BEBA-ED41003A2CE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{551B9E9D-95AD-4172-BE2E-213736E7792C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{551B9E9D-95AD-4172-BE2E-213736E7792C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{551B9E9D-95AD-4172-BE2E-213736E7792C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{551B9E9D-95AD-4172-BE2E-213736E7792C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
