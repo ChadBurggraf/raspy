@@ -47,10 +47,8 @@
     </Compile>
     <Compile Include="ArithmeticOperationProvider.cs" />
     <Compile Include="Associativity.cs" />
-    <Compile Include="FloatOperand.cs" />
-    <Compile Include="IntegerOperand.cs" />
     <Compile Include="IOperationProvider.cs" />
-    <Compile Include="Operand{T}.cs" />
+    <Compile Include="Operand.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="Parenthesis.cs" />
     <Compile Include="ParenthesisType.cs" />

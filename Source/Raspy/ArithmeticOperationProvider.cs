@@ -14,12 +14,6 @@ namespace Raspy
     /// </summary>
     public sealed class ArithmeticOperationProvider : IOperationProvider
     {
-        internal Token Add(Token[] args)
-        {
-            //Token left 
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Gets a value indicating whether this provider can create
         /// an operator for the given symbol.
@@ -65,26 +59,6 @@ namespace Raspy
             }
         }
 
-        internal Token Divide(Token[] args)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Token Factorial(Token[] args)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Token Modulo(Token[] args)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Token Multiply(Token[] args)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Executes an operator with a set of arguments.
         /// </summary>
@@ -127,9 +101,192 @@ namespace Raspy
             }
         }
 
+        /// <summary>
+        /// Implements the add operation.
+        /// </summary>
+        /// <param name="args">The operand arguments.</param>
+        /// <returns>The result of the operation.</returns>
+        internal Token Add(Token[] args)
+        {
+            Operand left = args[0] as Operand;
+            Operand right = args[1] as Operand;
+
+            if (left.IsFloat)
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToDouble(left.Value) + Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToDouble(left.Value) + Convert.ToInt64(right.Value));
+                }
+            }
+            else
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToInt64(left.Value) + Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToInt64(left.Value) + Convert.ToInt64(right.Value));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Implements the add operation.
+        /// </summary>
+        /// <param name="args">The operand arguments.</param>
+        /// <returns>The result of the operation.</returns>
+        internal Token Divide(Token[] args)
+        {
+            Operand left = args[0] as Operand;
+            Operand right = args[1] as Operand;
+
+            if (left.IsFloat)
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToDouble(left.Value) / Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToDouble(left.Value) / Convert.ToInt64(right.Value));
+                }
+            }
+            else
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToInt64(left.Value) / Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToInt64(left.Value) / Convert.ToInt64(right.Value));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Implements the factorial operation.
+        /// </summary>
+        /// <param name="args">The operand arguments.</param>
+        /// <returns>The result of the operation.</returns>
+        internal Token Factorial(Token[] args)
+        {
+            long f = 1;
+            long n = Convert.ToInt64(((Operand)args[0]).Value);
+
+            for (long i = 1; i <= n; i++)
+            {
+                f *= i;
+            }
+
+            return new Operand(f);
+        }
+
+        /// <summary>
+        /// Implements the modulo operation.
+        /// </summary>
+        /// <param name="args">The operand arguments.</param>
+        /// <returns>The result of the operation.</returns>
+        internal Token Modulo(Token[] args)
+        {
+            Operand left = args[0] as Operand;
+            Operand right = args[1] as Operand;
+
+            if (left.IsFloat)
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToDouble(left.Value) % Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToDouble(left.Value) % Convert.ToInt64(right.Value));
+                }
+            }
+            else
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToInt64(left.Value) % Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToInt64(left.Value) % Convert.ToInt64(right.Value));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Implements the multiply operation.
+        /// </summary>
+        /// <param name="args">The operand arguments.</param>
+        /// <returns>The result of the operation.</returns>
+        internal Token Multiply(Token[] args)
+        {
+            Operand left = args[0] as Operand;
+            Operand right = args[1] as Operand;
+
+            if (left.IsFloat)
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToDouble(left.Value) * Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToDouble(left.Value) * Convert.ToInt64(right.Value));
+                }
+            }
+            else
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToInt64(left.Value) * Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToInt64(left.Value) * Convert.ToInt64(right.Value));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Implements the subtract operation.
+        /// </summary>
+        /// <param name="args">The operand arguments.</param>
+        /// <returns>The result of the operation.</returns>
         internal Token Subtract(Token[] args)
         {
-            throw new NotImplementedException();
+            Operand left = args[0] as Operand;
+            Operand right = args[1] as Operand;
+
+            if (left.IsFloat)
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToDouble(left.Value) - Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToDouble(left.Value) - Convert.ToInt64(right.Value));
+                }
+            }
+            else
+            {
+                if (right.IsFloat)
+                {
+                    return new Operand(Convert.ToInt64(left.Value) - Convert.ToDouble(right.Value));
+                }
+                else
+                {
+                    return new Operand(Convert.ToInt64(left.Value) - Convert.ToInt64(right.Value));
+                }
+            }
         }
     }
 }

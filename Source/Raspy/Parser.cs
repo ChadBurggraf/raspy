@@ -8,8 +8,8 @@ namespace Raspy
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Globalization;
+    using System.Linq;
     using System.Text;
 
     /// <summary>
@@ -62,7 +62,7 @@ namespace Raspy
 
                 while (i < expression.Length)
                 {
-                    result = ReadOperand(expression, i);
+                    result = this.ReadOperand(expression, i);
 
                     if (result.Success)
                     {
@@ -70,12 +70,25 @@ namespace Raspy
                     }
                     else
                     {
-                        result = ReadOperator(expression, i);
+                        result = this.ReadOperator(expression, i);
 
                         if (result.Success)
                         {
+                            Operator op1 = (Operator)result.Token;
+
                             while (stack.Count > 0 && stack.Peek().IsOperator)
                             {
+                                Operator op2 = (Operator)stack.Peek();
+
+                                if ((op1.Associativity == Associativity.LeftToRight && op1.Precedence <= op2.Precedence)
+                                    || (op1.Associativity == Associativity.RightToLeft && op1.Precedence < op2.Precedence))
+                                {
+                                    output.Enqueue(stack.Pop());
+                                }
+                                else
+                                {
+                                    break;
+                                }
                             }
 
                             stack.Push(result.Token);
@@ -146,7 +159,7 @@ namespace Raspy
         /// <param name="expr">The string expression to read the operand from.</param>
         /// <param name="pos">The position to start reading at.</param>
         /// <returns>The result of the read.</returns>
-        internal static ReadResult ReadOperand(string expr, int pos)
+        internal ReadResult ReadOperand(string expr, int pos)
         {
             ReadResult result = new ReadResult() { Position = pos };
             StringBuilder sb = new StringBuilder();
@@ -188,11 +201,11 @@ namespace Raspy
                 {
                     if (hasPeriod)
                     {
-                        result.Token = new FloatOperand(double.Parse(sb.ToString(), CultureInfo.InvariantCulture));
+                        result.Token = new Operand(double.Parse(sb.ToString(), CultureInfo.InvariantCulture));
                     }
                     else
                     {
-                        result.Token = new IntegerOperand(long.Parse(sb.ToString(), CultureInfo.InvariantCulture));
+                        result.Token = new Operand(long.Parse(sb.ToString(), CultureInfo.InvariantCulture));
                     }
 
                     result.Position = pos;
@@ -215,9 +228,24 @@ namespace Raspy
         /// <param name="expr">The expression to read the operator from.</param>
         /// <param name="pos">The position to start reading at.</param>
         /// <returns>The result of the read.</returns>
-        internal static ReadResult ReadOperator(string expr, int pos)
+        internal ReadResult ReadOperator(string expr, int pos)
         {
-            throw new NotImplementedException();
+            ReadResult result = new ReadResult() { Position = pos };
+            char c = expr[pos];
+
+            if (!char.IsWhiteSpace(c))
+            {
+                IOperationProvider provider = this.GetProvider(c);
+
+                if (provider != null)
+                {
+                    result.Token = provider.CreateOperator(c);
+                    result.Position = pos + 1;
+                    result.Success = true;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

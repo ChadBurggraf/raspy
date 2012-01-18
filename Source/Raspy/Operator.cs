@@ -14,7 +14,7 @@ namespace Raspy
     public sealed class Operator : Token
     {
         /// <summary>
-        /// Creates a new instance of the Operator class.
+        /// Initializes a new instance of the Operator class.
         /// </summary>
         /// <param name="symbol">The representing the operator.</param>
         /// <param name="associativity">The operator's associativity.</param>
