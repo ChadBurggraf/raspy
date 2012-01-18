@@ -42,6 +42,14 @@ namespace Raspy
         public Associativity Associativity { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance represents an operand.
+        /// </summary>
+        public override bool IsOperand
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this instance represents an operator.
         /// </summary>
         public override bool IsOperator

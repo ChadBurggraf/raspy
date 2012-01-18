@@ -41,6 +41,14 @@ namespace Raspy
         public bool IsFloat { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance represents an operand.
+        /// </summary>
+        public override bool IsOperand
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this instance represents an operator.
         /// </summary>
         public override bool IsOperator

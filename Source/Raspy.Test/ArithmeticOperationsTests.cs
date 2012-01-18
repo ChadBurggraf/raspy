@@ -94,6 +94,10 @@ namespace Raspy.Test
             left = new Operand(2.5);
             right = new Operand(2);
             Assert.AreEqual(new Operand(6.25), ArithmeticOperationProvider.Power(new Token[] { left, right }));
+
+            left = new Operand(2);
+            right = new Operand(3);
+            Assert.AreEqual(new Operand(8), ArithmeticOperationProvider.Power(new Token[] { left, right }));
         }
 
         /// <summary>

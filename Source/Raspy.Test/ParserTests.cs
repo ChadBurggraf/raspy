@@ -17,6 +17,26 @@ namespace Raspy.Test
     public sealed class ParserTests
     {
         /// <summary>
+        /// Empty tests.
+        /// </summary>
+        [TestMethod]
+        public void ParseEmpty()
+        {
+            Parser parser = new Parser();
+            ExpressionQueue result = parser.Parse(null);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
+
+            result = parser.Parse(string.Empty);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
+
+            result = parser.Parse("     \t");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
+        }
+
+        /// <summary>
         /// Fail read operand tests.
         /// </summary>
         [TestMethod]

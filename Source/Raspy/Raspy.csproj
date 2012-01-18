@@ -47,10 +47,12 @@
     </Compile>
     <Compile Include="ArithmeticOperationProvider.cs" />
     <Compile Include="Associativity.cs" />
+    <Compile Include="Evaluator.cs" />
     <Compile Include="IOperationProvider.cs" />
     <Compile Include="Operand.cs" />
     <Compile Include="ExpressionQueue.cs" />
     <Compile Include="OperationProviderFactory.cs" />
+    <Compile Include="RaspyExpressions.cs" />
     <Compile Include="RaspyOperator.cs" />
     <Compile Include="Parenthesis.cs" />
     <Compile Include="ParenthesisType.cs" />

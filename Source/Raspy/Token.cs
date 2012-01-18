@@ -14,6 +14,11 @@ namespace Raspy
     public abstract class Token
     {
         /// <summary>
+        /// Gets a value indicating whether this instance represents an operand.
+        /// </summary>
+        public abstract bool IsOperand { get; }
+
+        /// <summary>
         /// Gets a value indicating whether this instance represents an operator.
         /// </summary>
         public abstract bool IsOperator { get; }

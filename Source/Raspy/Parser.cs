@@ -49,7 +49,7 @@ namespace Raspy
         /// <returns>An RPN token queue.</returns>
         public ExpressionQueue Parse(string expression)
         {
-            ExpressionQueue output = new ExpressionQueue();
+            ExpressionQueue output = new ExpressionQueue(expression);
             Stack<Token> stack = new Stack<Token>();
 
             if (!string.IsNullOrEmpty(expression))

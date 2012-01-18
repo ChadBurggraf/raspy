@@ -16,6 +16,20 @@ namespace Raspy
     public sealed class ExpressionQueue : Queue<Token>
     {
         /// <summary>
+        /// Initializes a new instance of the ExpressionQueue class.
+        /// </summary>
+        /// <param name="infixExpression">The original infix expression this instance is constructed from.</param>
+        public ExpressionQueue(string infixExpression)
+        {
+            this.InfixExpression = infixExpression;
+        }
+
+        /// <summary>
+        /// Gets the original infix expression this instance is constructed from.
+        /// </summary>
+        public string InfixExpression { get; private set; }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string representation of the object.</returns>
