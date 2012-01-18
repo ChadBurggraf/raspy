@@ -67,6 +67,7 @@ namespace Raspy
                     if (result.Success)
                     {
                         output.Enqueue(result.Token);
+                        i = result.Position;
                     }
                     else
                     {
@@ -80,8 +81,8 @@ namespace Raspy
                             {
                                 Operator op2 = (Operator)stack.Peek();
 
-                                if ((op1.Associativity == Associativity.LeftToRight && op1.Precedence <= op2.Precedence)
-                                    || (op1.Associativity == Associativity.RightToLeft && op1.Precedence < op2.Precedence))
+                                if ((op1.Associativity == Associativity.Left && op1.Precedence <= op2.Precedence)
+                                    || (op1.Associativity == Associativity.Right && op1.Precedence < op2.Precedence))
                                 {
                                     output.Enqueue(stack.Pop());
                                 }
@@ -92,10 +93,12 @@ namespace Raspy
                             }
 
                             stack.Push(result.Token);
+                            i = result.Position;
                         }
                         else if (expression[i] == '(')
                         {
                             stack.Push(new Parenthesis(ParenthesisType.Left));
+                            i++;
                         }
                         else if (expression[i] == ')')
                         {
@@ -115,13 +118,12 @@ namespace Raspy
                                     {
                                         stack.Pop();
                                         foundLeft = true;
-                                    }
-                                    else
-                                    {
                                         break;
                                     }
                                 }
                             }
+
+                            i++;
 
                             if (!foundLeft)
                             {
@@ -131,6 +133,10 @@ namespace Raspy
                         else if (!char.IsWhiteSpace(expression[i]))
                         {
                             throw new RaspyParseException(string.Format(CultureInfo.InvariantCulture, "The expression contains an invalid character, '{0}'.", expression[i]), expression);
+                        }
+                        else
+                        {
+                            i++;
                         }
                     }
                 }

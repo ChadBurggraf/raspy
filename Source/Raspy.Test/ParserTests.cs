@@ -7,6 +7,7 @@
 namespace Raspy.Test
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -36,6 +37,92 @@ namespace Raspy.Test
             result = parser.ReadOperand(expr, pos);
             Assert.IsFalse(result.Success);
             Assert.AreEqual(0, result.Position);
+        }
+
+        /// <summary>
+        /// Fail read operator tests.
+        /// </summary>
+        [TestMethod]
+        public void ParserFailReadOperator()
+        {
+            Parser parser = new Parser();
+
+            string expr = "3+4";
+            int pos = 0;
+
+            ReadResult result = parser.ReadOperator(expr, pos);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(0, result.Position);
+
+            expr = "3&4";
+            pos = 1;
+
+            result = parser.ReadOperator(expr, pos);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Position);
+        }
+
+        /// <summary>
+        /// Parse tests.
+        /// </summary>
+        [TestMethod]
+        public void ParserParse()
+        {
+            Parser parser = new Parser();
+            Queue<Token> output = parser.Parse("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3");
+            Assert.AreEqual(13, output.Count);
+
+            Token t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operand));
+            Assert.AreEqual(3L, ((Operand)t).Value);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operand));
+            Assert.AreEqual(4L, ((Operand)t).Value);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operand));
+            Assert.AreEqual(2L, ((Operand)t).Value);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operator));
+            Assert.AreEqual('*', ((Operator)t).Symbol);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operand));
+            Assert.AreEqual(1L, ((Operand)t).Value);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operand));
+            Assert.AreEqual(5L, ((Operand)t).Value);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operator));
+            Assert.AreEqual('-', ((Operator)t).Symbol);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operand));
+            Assert.AreEqual(2L, ((Operand)t).Value);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operand));
+            Assert.AreEqual(3L, ((Operand)t).Value);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operator));
+            Assert.AreEqual('^', ((Operator)t).Symbol);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operator));
+            Assert.AreEqual('^', ((Operator)t).Symbol);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operator));
+            Assert.AreEqual('/', ((Operator)t).Symbol);
+
+            t = output.Dequeue();
+            Assert.IsInstanceOfType(t, typeof(Operator));
+            Assert.AreEqual('+', ((Operator)t).Symbol);
         }
 
         /// <summary>
@@ -85,6 +172,25 @@ namespace Raspy.Test
             Assert.AreEqual(2, result.Position);
             Assert.IsInstanceOfType(result.Token, typeof(Operand));
             Assert.AreEqual(.2, ((Operand)result.Token).Value);
+        }
+
+        /// <summary>
+        /// Read operator tests.
+        /// </summary>
+        [TestMethod]
+        public void ParserReadOperator()
+        {
+            Parser parser = new Parser();
+
+            string expr = "3+4";
+            int pos = 1;
+
+            ReadResult result = parser.ReadOperator(expr, pos);
+            Assert.IsTrue(result.Success);
+            Assert.IsNotNull(result.Token);
+            Assert.AreEqual(2, result.Position);
+            Assert.IsInstanceOfType(result.Token, typeof(Operator));
+            Assert.AreEqual('+', ((Operator)result.Token).Symbol);
         }
     }
 }

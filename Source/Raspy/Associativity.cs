@@ -14,13 +14,13 @@ namespace Raspy
     public enum Associativity
     {
         /// <summary>
-        /// Identifies left-to-right associativity.
+        /// Identifies left associativity.
         /// </summary>
-        LeftToRight,
+        Left,
 
         /// <summary>
-        /// Identifies right-to-left associativity.
+        /// Identifies right associativity.
         /// </summary>
-        RightToLeft
+        Right
     }
 }

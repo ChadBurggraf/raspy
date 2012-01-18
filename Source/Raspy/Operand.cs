@@ -58,5 +58,19 @@ namespace Raspy
         /// Gets the value of the operand.
         /// </summary>
         public object Value { get; private set; }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string representation of the object.</returns>
+        public override string ToString()
+        {
+            if (this.Value != null)
+            {
+                return this.Value.ToString();
+            }
+
+            return base.ToString();
+        }
     }
 }

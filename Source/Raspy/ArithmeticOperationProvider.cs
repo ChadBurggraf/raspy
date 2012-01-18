@@ -25,6 +25,7 @@ namespace Raspy
             switch (symbol)
             {
                 case '!':
+                case '^':
                 case '*':
                 case '/':
                 case '%':
@@ -46,14 +47,16 @@ namespace Raspy
             switch (symbol)
             {
                 case '!':
-                    return new Operator(symbol, Associativity.RightToLeft, 1, 1);
+                    return new Operator(symbol, Associativity.Right, 4, 1);
+                case '^':
+                    return new Operator(symbol, Associativity.Right, 4, 2);
                 case '*':
                 case '/':
                 case '%':
-                    return new Operator(symbol, Associativity.LeftToRight, 2, 2);
+                    return new Operator(symbol, Associativity.Left, 3, 2);
                 case '+':
                 case '-':
-                    return new Operator(symbol, Associativity.LeftToRight, 3, 2);
+                    return new Operator(symbol, Associativity.Left, 2, 2);
                 default:
                     return null;
             }
@@ -86,6 +89,8 @@ namespace Raspy
             {
                 case '!':
                     return this.Factorial(args);
+                case '^':
+                    return this.Power(args);
                 case '*':
                     return this.Multiply(args);
                 case '/':
@@ -253,6 +258,19 @@ namespace Raspy
                     return new Operand(Convert.ToInt64(left.Value) * Convert.ToInt64(right.Value));
                 }
             }
+        }
+
+        /// <summary>
+        /// Implements the power operation.
+        /// </summary>
+        /// <param name="args">The operand arguments.</param>
+        /// <returns>The result of the operation.</returns>
+        internal Token Power(Token[] args)
+        {
+            double left = Convert.ToDouble(((Operand)args[0]).Value);
+            double right = Convert.ToDouble(((Operand)args[1]).Value);
+
+            return new Operand(Math.Pow(left, right));
         }
 
         /// <summary>

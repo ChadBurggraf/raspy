@@ -63,5 +63,14 @@ namespace Raspy
         /// Gets the operator's symbol.
         /// </summary>
         public char Symbol { get; private set; }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string representation of the object.</returns>
+        public override string ToString()
+        {
+            return this.Symbol.ToString();
+        }
     }
 }
