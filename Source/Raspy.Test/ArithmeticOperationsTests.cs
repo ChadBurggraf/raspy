@@ -47,7 +47,7 @@ namespace Raspy.Test
         /// Factorial tests.
         /// </summary>
         [TestMethod]
-        public void ArithmeticOperaionsFactorial()
+        public void ArithmeticOperationsFactorial()
         {
             Operand op = new Operand(4);
             Assert.AreEqual(new Operand(24), ArithmeticOperationProvider.Factorial(new Token[] { op }));
@@ -57,7 +57,7 @@ namespace Raspy.Test
         /// Modulo tests.
         /// </summary>
         [TestMethod]
-        public void ArithmeticOperaionsModulo()
+        public void ArithmeticOperationsModulo()
         {
             Operand left = new Operand(3);
             Operand right = new Operand(4);
@@ -71,7 +71,7 @@ namespace Raspy.Test
         /// Multiply tests.
         /// </summary>
         [TestMethod]
-        public void ArithmeticOperaionsMultiploy()
+        public void ArithmeticOperationsMultiply()
         {
             Operand left = new Operand(3);
             Operand right = new Operand(4);
@@ -85,7 +85,7 @@ namespace Raspy.Test
         /// Power tests.
         /// </summary>
         [TestMethod]
-        public void ArithmeticOperaionsPower()
+        public void ArithmeticOperationsPower()
         {
             Operand left = new Operand(3);
             Operand right = new Operand(4);
