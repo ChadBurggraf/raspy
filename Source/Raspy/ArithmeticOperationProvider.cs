@@ -42,21 +42,21 @@ namespace Raspy
         /// </summary>
         /// <param name="symbol">The symbol to create the operator for.</param>
         /// <returns>An operator.</returns>
-        public Operator CreateOperator(char symbol)
+        public RaspyOperator CreateOperator(char symbol)
         {
             switch (symbol)
             {
                 case '!':
-                    return new Operator(symbol, Associativity.Right, 4, 1);
+                    return new RaspyOperator(symbol, Associativity.Right, 4, 1);
                 case '^':
-                    return new Operator(symbol, Associativity.Right, 4, 2);
+                    return new RaspyOperator(symbol, Associativity.Right, 4, 2);
                 case '*':
                 case '/':
                 case '%':
-                    return new Operator(symbol, Associativity.Left, 3, 2);
+                    return new RaspyOperator(symbol, Associativity.Left, 3, 2);
                 case '+':
                 case '-':
-                    return new Operator(symbol, Associativity.Left, 2, 2);
+                    return new RaspyOperator(symbol, Associativity.Left, 2, 2);
                 default:
                     return null;
             }
@@ -68,7 +68,7 @@ namespace Raspy
         /// <param name="op">The operator to execute.</param>
         /// <param name="args">The arguments to use when executing the operator.</param>
         /// <returns>The result of the operation.</returns>
-        public Token Operate(Operator op, Token[] args)
+        public Token Operate(RaspyOperator op, Token[] args)
         {
             if (op == null)
             {
@@ -88,19 +88,19 @@ namespace Raspy
             switch (op.Symbol)
             {
                 case '!':
-                    return this.Factorial(args);
+                    return Factorial(args);
                 case '^':
-                    return this.Power(args);
+                    return Power(args);
                 case '*':
-                    return this.Multiply(args);
+                    return Multiply(args);
                 case '/':
-                    return this.Divide(args);
+                    return Divide(args);
                 case '%':
-                    return this.Modulo(args);
+                    return Modulo(args);
                 case '+':
-                    return this.Add(args);
+                    return Add(args);
                 case '-':
-                    return this.Subtract(args);
+                    return Subtract(args);
                 default:
                     throw new ArgumentException("op", string.Format(CultureInfo.InvariantCulture, "The operator '{0}' is not implemented by this provider.", op.Symbol));
             }
@@ -111,7 +111,7 @@ namespace Raspy
         /// </summary>
         /// <param name="args">The operand arguments.</param>
         /// <returns>The result of the operation.</returns>
-        internal Token Add(Token[] args)
+        internal static Token Add(Token[] args)
         {
             Operand left = args[0] as Operand;
             Operand right = args[1] as Operand;
@@ -120,58 +120,37 @@ namespace Raspy
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToDouble(left.Value) + Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) + Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToDouble(left.Value) + Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) + Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
             else
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToInt64(left.Value) + Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) + Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToInt64(left.Value) + Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) + Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
         }
 
         /// <summary>
-        /// Implements the add operation.
+        /// Implements the divide operation.
         /// </summary>
         /// <param name="args">The operand arguments.</param>
         /// <returns>The result of the operation.</returns>
-        internal Token Divide(Token[] args)
+        internal static Token Divide(Token[] args)
         {
-            Operand left = args[0] as Operand;
-            Operand right = args[1] as Operand;
+            double left = Convert.ToDouble(((Operand)args[0]).Value, CultureInfo.InvariantCulture);
+            double right = Convert.ToDouble(((Operand)args[1]).Value, CultureInfo.InvariantCulture);
 
-            if (left.IsFloat)
-            {
-                if (right.IsFloat)
-                {
-                    return new Operand(Convert.ToDouble(left.Value) / Convert.ToDouble(right.Value));
-                }
-                else
-                {
-                    return new Operand(Convert.ToDouble(left.Value) / Convert.ToInt64(right.Value));
-                }
-            }
-            else
-            {
-                if (right.IsFloat)
-                {
-                    return new Operand(Convert.ToInt64(left.Value) / Convert.ToDouble(right.Value));
-                }
-                else
-                {
-                    return new Operand(Convert.ToInt64(left.Value) / Convert.ToInt64(right.Value));
-                }
-            }
+            return new Operand(left / right);
         }
 
         /// <summary>
@@ -179,10 +158,10 @@ namespace Raspy
         /// </summary>
         /// <param name="args">The operand arguments.</param>
         /// <returns>The result of the operation.</returns>
-        internal Token Factorial(Token[] args)
+        internal static Token Factorial(Token[] args)
         {
             long f = 1;
-            long n = Convert.ToInt64(((Operand)args[0]).Value);
+            long n = Convert.ToInt64(((Operand)args[0]).Value, CultureInfo.InvariantCulture);
 
             for (long i = 1; i <= n; i++)
             {
@@ -197,7 +176,7 @@ namespace Raspy
         /// </summary>
         /// <param name="args">The operand arguments.</param>
         /// <returns>The result of the operation.</returns>
-        internal Token Modulo(Token[] args)
+        internal static Token Modulo(Token[] args)
         {
             Operand left = args[0] as Operand;
             Operand right = args[1] as Operand;
@@ -206,22 +185,22 @@ namespace Raspy
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToDouble(left.Value) % Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) % Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToDouble(left.Value) % Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) % Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
             else
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToInt64(left.Value) % Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) % Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToInt64(left.Value) % Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) % Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -231,7 +210,7 @@ namespace Raspy
         /// </summary>
         /// <param name="args">The operand arguments.</param>
         /// <returns>The result of the operation.</returns>
-        internal Token Multiply(Token[] args)
+        internal static Token Multiply(Token[] args)
         {
             Operand left = args[0] as Operand;
             Operand right = args[1] as Operand;
@@ -240,22 +219,22 @@ namespace Raspy
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToDouble(left.Value) * Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) * Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToDouble(left.Value) * Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) * Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
             else
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToInt64(left.Value) * Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) * Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToInt64(left.Value) * Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) * Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -265,12 +244,17 @@ namespace Raspy
         /// </summary>
         /// <param name="args">The operand arguments.</param>
         /// <returns>The result of the operation.</returns>
-        internal Token Power(Token[] args)
+        internal static Token Power(Token[] args)
         {
-            double left = Convert.ToDouble(((Operand)args[0]).Value);
-            double right = Convert.ToDouble(((Operand)args[1]).Value);
+            Operand left = args[0] as Operand;
+            Operand right = args[1] as Operand;
+            bool integer = !left.IsFloat && !right.IsFloat;
 
-            return new Operand(Math.Pow(left, right));
+            double result = Math.Pow(
+                Convert.ToDouble(left.Value, CultureInfo.InvariantCulture),
+                Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
+
+            return integer ? new Operand((long)result) : new Operand(result);
         }
 
         /// <summary>
@@ -278,7 +262,7 @@ namespace Raspy
         /// </summary>
         /// <param name="args">The operand arguments.</param>
         /// <returns>The result of the operation.</returns>
-        internal Token Subtract(Token[] args)
+        internal static Token Subtract(Token[] args)
         {
             Operand left = args[0] as Operand;
             Operand right = args[1] as Operand;
@@ -287,22 +271,22 @@ namespace Raspy
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToDouble(left.Value) - Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) - Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToDouble(left.Value) - Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToDouble(left.Value, CultureInfo.InvariantCulture) - Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
             else
             {
                 if (right.IsFloat)
                 {
-                    return new Operand(Convert.ToInt64(left.Value) - Convert.ToDouble(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) - Convert.ToDouble(right.Value, CultureInfo.InvariantCulture));
                 }
                 else
                 {
-                    return new Operand(Convert.ToInt64(left.Value) - Convert.ToInt64(right.Value));
+                    return new Operand(Convert.ToInt64(left.Value, CultureInfo.InvariantCulture) - Convert.ToInt64(right.Value, CultureInfo.InvariantCulture));
                 }
             }
         }

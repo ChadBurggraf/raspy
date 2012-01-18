@@ -69,7 +69,7 @@ namespace Raspy.Test
         public void ParserParse()
         {
             Parser parser = new Parser();
-            Queue<Token> output = parser.Parse("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3");
+            ExpressionQueue output = parser.Parse("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3");
             Assert.AreEqual(13, output.Count);
 
             Token t = output.Dequeue();
@@ -85,8 +85,8 @@ namespace Raspy.Test
             Assert.AreEqual(2L, ((Operand)t).Value);
 
             t = output.Dequeue();
-            Assert.IsInstanceOfType(t, typeof(Operator));
-            Assert.AreEqual('*', ((Operator)t).Symbol);
+            Assert.IsInstanceOfType(t, typeof(RaspyOperator));
+            Assert.AreEqual('*', ((RaspyOperator)t).Symbol);
 
             t = output.Dequeue();
             Assert.IsInstanceOfType(t, typeof(Operand));
@@ -97,8 +97,8 @@ namespace Raspy.Test
             Assert.AreEqual(5L, ((Operand)t).Value);
 
             t = output.Dequeue();
-            Assert.IsInstanceOfType(t, typeof(Operator));
-            Assert.AreEqual('-', ((Operator)t).Symbol);
+            Assert.IsInstanceOfType(t, typeof(RaspyOperator));
+            Assert.AreEqual('-', ((RaspyOperator)t).Symbol);
 
             t = output.Dequeue();
             Assert.IsInstanceOfType(t, typeof(Operand));
@@ -109,20 +109,20 @@ namespace Raspy.Test
             Assert.AreEqual(3L, ((Operand)t).Value);
 
             t = output.Dequeue();
-            Assert.IsInstanceOfType(t, typeof(Operator));
-            Assert.AreEqual('^', ((Operator)t).Symbol);
+            Assert.IsInstanceOfType(t, typeof(RaspyOperator));
+            Assert.AreEqual('^', ((RaspyOperator)t).Symbol);
 
             t = output.Dequeue();
-            Assert.IsInstanceOfType(t, typeof(Operator));
-            Assert.AreEqual('^', ((Operator)t).Symbol);
+            Assert.IsInstanceOfType(t, typeof(RaspyOperator));
+            Assert.AreEqual('^', ((RaspyOperator)t).Symbol);
 
             t = output.Dequeue();
-            Assert.IsInstanceOfType(t, typeof(Operator));
-            Assert.AreEqual('/', ((Operator)t).Symbol);
+            Assert.IsInstanceOfType(t, typeof(RaspyOperator));
+            Assert.AreEqual('/', ((RaspyOperator)t).Symbol);
 
             t = output.Dequeue();
-            Assert.IsInstanceOfType(t, typeof(Operator));
-            Assert.AreEqual('+', ((Operator)t).Symbol);
+            Assert.IsInstanceOfType(t, typeof(RaspyOperator));
+            Assert.AreEqual('+', ((RaspyOperator)t).Symbol);
         }
 
         /// <summary>
@@ -189,8 +189,8 @@ namespace Raspy.Test
             Assert.IsTrue(result.Success);
             Assert.IsNotNull(result.Token);
             Assert.AreEqual(2, result.Position);
-            Assert.IsInstanceOfType(result.Token, typeof(Operator));
-            Assert.AreEqual('+', ((Operator)result.Token).Symbol);
+            Assert.IsInstanceOfType(result.Token, typeof(RaspyOperator));
+            Assert.AreEqual('+', ((RaspyOperator)result.Token).Symbol);
         }
     }
 }

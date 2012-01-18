@@ -8,6 +8,7 @@ namespace Raspy
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -17,32 +18,28 @@ namespace Raspy
     /// </summary>
     public sealed class Parser
     {
-        private Dictionary<char, IOperationProvider> providerCache = new Dictionary<char, IOperationProvider>();
-        private IOperationProvider[] providers;
+        private OperationProviderFactory providerFactory;
 
         /// <summary>
         /// Initializes a new instance of the Parser class.
         /// </summary>
         public Parser()
         {
-            this.providers = new IOperationProvider[]
-            {
-                new ArithmeticOperationProvider()
-            };
+            this.providerFactory = OperationProviderFactory.DefaultInstance;
         }
 
         /// <summary>
         /// Initializes a new instance of the Parser class.
         /// </summary>
-        /// <param name="providers">The custom <see cref="IOperationProvider"/> collection to use.</param>
-        public Parser(IEnumerable<IOperationProvider> providers)
+        /// <param name="providerFactory">The <see cref="OperationProviderFactory"/> to use when creating <see cref="IOperationProvider"/>s.</param>
+        public Parser(OperationProviderFactory providerFactory)
         {
-            this.providers = (providers ?? new IOperationProvider[0]).ToArray();
-
-            if (this.providers.Length == 0)
+            if (providerFactory == null)
             {
-                throw new ArgumentException("The providers collection must contain at least one IOperationProvider implementation.", "providers");
+                throw new ArgumentNullException("providerFactory", "providerFactory cannot be null.");
             }
+
+            this.providerFactory = providerFactory;
         }
 
         /// <summary>
@@ -50,9 +47,9 @@ namespace Raspy
         /// </summary>
         /// <param name="expression">The expression to parse.</param>
         /// <returns>An RPN token queue.</returns>
-        public Queue<Token> Parse(string expression)
+        public ExpressionQueue Parse(string expression)
         {
-            Queue<Token> output = new Queue<Token>();
+            ExpressionQueue output = new ExpressionQueue();
             Stack<Token> stack = new Stack<Token>();
 
             if (!string.IsNullOrEmpty(expression))
@@ -75,11 +72,11 @@ namespace Raspy
 
                         if (result.Success)
                         {
-                            Operator op1 = (Operator)result.Token;
+                            RaspyOperator op1 = (RaspyOperator)result.Token;
 
                             while (stack.Count > 0 && stack.Peek().IsOperator)
                             {
-                                Operator op2 = (Operator)stack.Peek();
+                                RaspyOperator op2 = (RaspyOperator)stack.Peek();
 
                                 if ((op1.Associativity == Associativity.Left && op1.Precedence <= op2.Precedence)
                                     || (op1.Associativity == Associativity.Right && op1.Precedence < op2.Precedence))
@@ -165,6 +162,7 @@ namespace Raspy
         /// <param name="expr">The string expression to read the operand from.</param>
         /// <param name="pos">The position to start reading at.</param>
         /// <returns>The result of the read.</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Interested in consistent access semantics with ReadOperator.")]
         internal ReadResult ReadOperand(string expr, int pos)
         {
             ReadResult result = new ReadResult() { Position = pos };
@@ -241,7 +239,7 @@ namespace Raspy
 
             if (!char.IsWhiteSpace(c))
             {
-                IOperationProvider provider = this.GetProvider(c);
+                IOperationProvider provider = this.providerFactory.GetProvider(c);
 
                 if (provider != null)
                 {
@@ -252,44 +250,6 @@ namespace Raspy
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IOperationProvider"/> to use when creating the operator for the given symbol.
-        /// </summary>
-        /// <param name="symbol">The symbol to get the <see cref="IOperationProvider"/> for.</param>
-        /// <returns>An <see cref="IOperationProvider"/>, or null if none was found for the given symbol.</returns>
-        private IOperationProvider GetProvider(char symbol)
-        {
-            IOperationProvider provider = null;
-            bool containsKey = false;
-
-            lock (this.providerCache)
-            {
-                if (this.providerCache.ContainsKey(symbol))
-                {
-                    provider = this.providerCache[symbol];
-                    containsKey = true;
-                }
-                else
-                {
-                    containsKey = false;
-                }
-            }
-
-            if (!containsKey)
-            {
-                provider = (from p in this.providers
-                            where p.CanCreateOperator(symbol)
-                            select p).FirstOrDefault();
-
-                lock (this.providerCache)
-                {
-                    this.providerCache[symbol] = provider;
-                }
-            }
-
-            return provider;
         }
     }
 }

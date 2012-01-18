@@ -7,10 +7,12 @@
 namespace Raspy
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Defines possible operator associativities.
     /// </summary>
+    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "The spelling is correct.")]
     public enum Associativity
     {
         /// <summary>

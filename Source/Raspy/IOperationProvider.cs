@@ -26,7 +26,7 @@ namespace Raspy
         /// </summary>
         /// <param name="symbol">The symbol to create the operator for.</param>
         /// <returns>An operator.</returns>
-        Operator CreateOperator(char symbol);
+        RaspyOperator CreateOperator(char symbol);
 
         /// <summary>
         /// Executes an operator with a set of arguments.
@@ -34,6 +34,6 @@ namespace Raspy
         /// <param name="op">The operator to execute.</param>
         /// <param name="args">The arguments to use when executing the operator.</param>
         /// <returns>The result of the operation.</returns>
-        Token Operate(Operator op, Token[] args);
+        Token Operate(RaspyOperator op, Token[] args);
     }
 }

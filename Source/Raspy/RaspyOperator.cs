@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------------------
-// <copyright file="Operator.cs" company="Tasty Codes">
+// <copyright file="RaspyOperator.cs" company="Tasty Codes">
 //     Copyright (c) 2012 Chad Burggraf.
 // </copyright>
 //-----------------------------------------------------------------------------------------
@@ -7,20 +7,22 @@
 namespace Raspy
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Represents an operator token.
     /// </summary>
-    public sealed class Operator : Token
+    public sealed class RaspyOperator : Token
     {
         /// <summary>
-        /// Initializes a new instance of the Operator class.
+        /// Initializes a new instance of the RaspyOperator class.
         /// </summary>
         /// <param name="symbol">The representing the operator.</param>
         /// <param name="associativity">The operator's associativity.</param>
         /// <param name="precedence">The operator's precedence.</param>
         /// <param name="argumentCount">The operator's argument count.</param>
-        public Operator(char symbol, Associativity associativity, int precedence, int argumentCount)
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "The spelling is correct.")]
+        public RaspyOperator(char symbol, Associativity associativity, int precedence, int argumentCount)
         {
             this.Symbol = symbol;
             this.Associativity = associativity;
@@ -36,6 +38,7 @@ namespace Raspy
         /// <summary>
         /// Gets the operator's associativity.
         /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "The spelling is correct.")]
         public Associativity Associativity { get; private set; }
 
         /// <summary>

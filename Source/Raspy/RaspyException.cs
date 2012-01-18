@@ -18,7 +18,7 @@ namespace Raspy
         /// <summary>
         /// Initializes a new instance of the RaspyException class.
         /// </summary>
-        public RaspyException()
+        protected RaspyException()
             : base()
         {
         }
@@ -27,7 +27,7 @@ namespace Raspy
         /// Initializes a new instance of the RaspyException class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        public RaspyException(string message)
+        protected RaspyException(string message)
             : base(message)
         {
         }
@@ -37,7 +37,7 @@ namespace Raspy
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception.</param>
-        public RaspyException(string message, Exception innerException)
+        protected RaspyException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
