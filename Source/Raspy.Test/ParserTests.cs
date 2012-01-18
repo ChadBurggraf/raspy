@@ -1,0 +1,86 @@
+﻿//-----------------------------------------------------------------------------------------
+// <copyright file="ParserTests.cs" company="Tasty Codes">
+//     Copyright (c) 2012 Chad Burggraf.
+// </copyright>
+//-----------------------------------------------------------------------------------------
+
+namespace Raspy.Test
+{
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    /// <summary>
+    /// Parser tests.
+    /// </summary>
+    [TestClass]
+    public sealed class ParserTests
+    {
+        /// <summary>
+        /// Fail read operand tests.
+        /// </summary>
+        [TestMethod]
+        public void ParserFailReadOperand()
+        {
+            string expr = "(467)";
+            int pos = 0;
+
+            ReadResult result = Parser.ReadOperand(expr, pos);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(0, result.Position);
+
+            expr = "FFF";
+            pos = 0;
+
+            result = Parser.ReadOperand(expr, pos);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(0, result.Position);
+        }
+
+        /// <summary>
+        /// Read operand tests.
+        /// </summary>
+        [TestMethod]
+        public void ParserReadOperand()
+        {
+            string expr = "3";
+            int pos = 0;
+
+            ReadResult result = Parser.ReadOperand(expr, pos);
+            Assert.IsTrue(result.Success);
+            Assert.IsNotNull(result.Token);
+            Assert.AreEqual(1, result.Position);
+            Assert.IsInstanceOfType(result.Token, typeof(IntegerOperand));
+            Assert.AreEqual(3L, ((IntegerOperand)result.Token).Value);
+
+            expr = "(467)";
+            pos = 1;
+
+            result = Parser.ReadOperand(expr, pos);
+            Assert.IsTrue(result.Success);
+            Assert.IsNotNull(result.Token);
+            Assert.AreEqual(4, result.Position);
+            Assert.IsInstanceOfType(result.Token, typeof(IntegerOperand));
+            Assert.AreEqual(467L, ((IntegerOperand)result.Token).Value);
+
+            expr = "0.1234";
+            pos = 0;
+
+            result = Parser.ReadOperand(expr, pos);
+            Assert.IsTrue(result.Success);
+            Assert.IsNotNull(result.Token);
+            Assert.AreEqual(6, result.Position);
+            Assert.IsInstanceOfType(result.Token, typeof(FloatOperand));
+            Assert.AreEqual(.1234, ((FloatOperand)result.Token).Value);
+
+            expr = ".2.3.4";
+            pos = 0;
+
+            result = Parser.ReadOperand(expr, pos);
+            Assert.IsTrue(result.Success);
+            Assert.IsNotNull(result.Token);
+            Assert.AreEqual(2, result.Position);
+            Assert.IsInstanceOfType(result.Token, typeof(FloatOperand));
+            Assert.AreEqual(.2, ((FloatOperand)result.Token).Value);
+        }
+    }
+}

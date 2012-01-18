@@ -6,4 +6,5 @@ Artifacts/
 bin/
 Build/
 obj/
+TestResults/
 
