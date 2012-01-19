@@ -15,6 +15,8 @@ You can also build using the solution in Visual Studio 2010.
 
 ## Basic Usage
 
+`Raspy.dll` is compiled against the .NET Framework v3.5 Client Profile.
+
 Include the `Raspy` namespace in your source file. There are a few extension methods available for the
 most common operations (e.g., evaluating an expression to get a result and parsing an expression to 
 get a tokenized postfix expression queue). The extensions are available on the `string` class, and 
