@@ -8,6 +8,7 @@ namespace Raspy
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Text;
 
     /// <summary>
@@ -39,6 +40,24 @@ namespace Raspy
         }
 
         /// <summary>
+        /// Parses and evaluates the expression.
+        /// </summary>
+        /// <typeparam name="T">The type expected for the output of the evaluation (e.g., long, double, etc.).</typeparam>
+        /// <param name="expression">The expression to parse and evaluate.</param>
+        /// <returns>The result of the evaluation.</returns>
+        public static T ParseAndEvaluate<T>(this string expression) where T : struct
+        {
+            object result = ParseAndEvaluate(expression);
+
+            if (result != null)
+            {
+                return (T)Convert.ChangeType(result, typeof(T));
+            }
+
+            return default(T);
+        }
+
+        /// <summary>
         /// Tries to parse and evaluate the expression, returning true if successful
         /// and false otherwise.
         /// </summary>
@@ -51,7 +70,7 @@ namespace Raspy
 
             try
             {
-                result = Parse(expression);
+                result = evaluator.Evaluate(Parse(expression));
                 return true;
             }
             catch (RaspyException)
@@ -59,6 +78,44 @@ namespace Raspy
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Tries to parse and evaluate the expression, returning true if successful
+        /// and false otherwise.
+        /// </summary>
+        /// <typeparam name="T">The type expected for the output of the evaluation (e.g., long, double, etc.).</typeparam>
+        /// <param name="expression">The expression to parse and evaluate.</param>
+        /// <param name="result">Contains the result of the evaluation upon completion.</param>
+        /// <returns>True if the parse and evaluation was successful, false otherwise.</returns>
+        public static bool TryParseAndEvaluate<T>(this string expression, out T result)
+        {
+            result = default(T);
+
+            object r;
+            bool success = TryParseAndEvaluate(expression, out r);
+
+            if (success && r != null)
+            {
+                success = false;
+
+                try
+                {
+                    result = (T)Convert.ChangeType(r, typeof(T));
+                    success = true;
+                }
+                catch (InvalidCastException)
+                {
+                }
+                catch (FormatException)
+                {
+                }
+                catch (OverflowException)
+                {
+                }
+            }
+
+            return success;
         }
 
         /// <summary>
